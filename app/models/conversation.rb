@@ -7,8 +7,10 @@ class Conversation < ApplicationRecord
 
   def self.start
     last_convo = Conversation.order(created_at: :desc).first
-    last_seed = last_convo.try(:name_seed) ||
-      Deacon::RandomGenerator.random_initial_seed
+    last_seed = (
+      last_convo.try(:name_seed) || Deacon::RandomGenerator.random_initial_seed
+    ).to_i
+
     name_generator = Deacon::RandomGenerator.new
     new_seed, first_name, last_name = name_generator.generate(last_seed)
 
